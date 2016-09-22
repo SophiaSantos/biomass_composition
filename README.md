@@ -19,6 +19,15 @@ This application allows to obtain the results rapidly and is also a user-friendl
 - Percentage of the cellular content in each macromolecule (Protein, DNA and RNA) in percentage (number between 0 and 1).
 
 
+### Example files
+
+In the folder examples are included examples of input files with sequences of Protein (E.coli_AA.faa), DNA (E.coli_DNA.txt) and the 3 main types of RNA (E.coli_mRNA.txt, E.coli_rRNA.txt, E.coli_tRNA.txt), in the FASTA format, and with transcriptomic information (E.coli_Genedata.csv), in csv format. All data is from the organism Escherichia coli K12 MG1655.
+
+The input percentage values required are included in the file Input.csv.
+
+The expected results are in the csv files with the prefix res (res_Prot.csv, res_DNA, csv and res_RNA.csv).
+
+
 ### Prerequisites
 
 [Git][] and [JDK 8 update 20 or later][JDK8 build]
