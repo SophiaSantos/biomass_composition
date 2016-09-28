@@ -134,8 +134,8 @@ public class ReadFile {
 
 			if (geneLocus != null) {
 				proteinsMap.put(geneLocus, null);
-				System.out.print ("\n" + geneLocus);
-				System.out.print("\t" + proteinSequence);
+				//System.out.print ("\n" + geneLocus);
+				//System.out.print("\t" + proteinSequence);
 				
 				gene_seq.put(geneLocus,proteinSequence);
 			}
@@ -164,7 +164,7 @@ public class ReadFile {
 			h.put(geneLocus, ocurrencias);
 			
 			int tamanhoseq=proteinSequence.getLength();
-			System.out.print("\n" + tamanhoseq + "\n");
+			//System.out.print("\n" + tamanhoseq + "\n");
 		
 		
 		
