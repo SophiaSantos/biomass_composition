@@ -8,7 +8,7 @@ All data obtained can be easily exported to a csv file.
 
 This application allows to obtain the results rapidly and is also a user-friendly tool for users with any or little background in informatics.
 
-### Obligatory inputs
+### Mandatory inputs
 
 - Input files with sequences of Proteins, DNA and RNA, exclusive in the FASTA format; 
 
