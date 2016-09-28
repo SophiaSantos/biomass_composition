@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -15,8 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -25,20 +21,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.plaf.TextUI;
 
-import org.apache.commons.io.FileUtils;
-import org.biojava3.core.sequence.AccessionID;
 import org.biojava3.core.sequence.DNASequence;
 import org.biojava3.core.sequence.ProteinSequence;
 import org.biojava3.core.sequence.compound.AminoAcidCompound;
 import org.biojava3.core.sequence.compound.NucleotideCompound;
-import org.biojava3.core.sequence.io.FastaReader;
 import org.biojava3.core.sequence.io.FastaReaderHelper;
-import org.biojava3.core.sequence.io.FastaSequenceParser;
-
-import pt.uminho.sysbio.biomass.ReadFile;
 
 
 
