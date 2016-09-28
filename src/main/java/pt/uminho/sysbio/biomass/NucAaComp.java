@@ -19,11 +19,14 @@ import java.util.Set;
 import java.util.Spliterator;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.TextUI;
 
 import org.apache.commons.io.FileUtils;
 import org.biojava3.core.sequence.AccessionID;
@@ -34,20 +37,16 @@ import org.biojava3.core.sequence.compound.NucleotideCompound;
 import org.biojava3.core.sequence.io.FastaReader;
 import org.biojava3.core.sequence.io.FastaReaderHelper;
 import org.biojava3.core.sequence.io.FastaSequenceParser;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+
+import pt.uminho.sysbio.biomass.ReadFile;
+
 
 
 public class NucAaComp {
 
 	private JFrame frame;
+	
 	private JLabel lblA_1;
-
-	Display d= new Display();
-	Shell s = new Shell(d);
 
 	String DNAseq;
 	String AAseq;
@@ -96,8 +95,6 @@ public class NucAaComp {
 	private JTextField tRNA_per;
 	private JTextField rRNA_per;
 
-	final Text fileName = new Text(s, SWT.BORDER);
-	
 	private String[] aaArray = {
 			"A", "Ala",
 			"R", "Arg",
@@ -160,6 +157,7 @@ public class NucAaComp {
 	Hashtable <String,Double> rnaContentm_mm=new Hashtable <String, Double>();
 	Hashtable <String,Double> rnaContentm_mt=new Hashtable <String, Double>();
 	Hashtable<String, Double> rnaContentmmol_gDW = new Hashtable<String, Double> ();
+
 	/**
 	 * Launch the application.
 	 */
@@ -190,8 +188,7 @@ public class NucAaComp {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 800, 509);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-
+		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(0, 0, 774, 570);
 		frame.getContentPane().add(tabbedPane);
@@ -217,17 +214,20 @@ public class NucAaComp {
 		JButton OpenFP = new JButton("Open");
 		OpenFP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				FileDialog fd = new FileDialog(s, SWT.OPEN);
-				fd.setText("Abrir");
-				fd.setFilterPath("C:/");
-				String[] filterExt = { "*.txt", "*.doc", ".rtf", "*.*" };
-				fd.setFilterExtensions(filterExt);
-				String selected = fd.open();
-				inputFP.setText(selected);
-
-			}
-		});
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to open");   
+				 
+				int userSelection = fileChooser.showOpenDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToOpen = fileChooser.getSelectedFile();
+				    inputFP.setText(fileToOpen.getAbsolutePath());
+				    System.out.println("Save as file: " + fileToOpen.getAbsolutePath());
+				}
+			}});
 		OpenFP.setBounds(251, 27, 72, 23);
 		panel.add(OpenFP);
 
@@ -239,7 +239,7 @@ public class NucAaComp {
 		JLabel lblProteinComposition = new JLabel("Cellular content Protein");
 		lblProteinComposition.setBounds(518, 31, 145, 14);
 		panel.add(lblProteinComposition);
-
+		
 		JButton DetermineP = new JButton("Determine");
 		DetermineP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -250,7 +250,7 @@ public class NucAaComp {
 				double bm_prot = Double.parseDouble(BM_prot.getText());
 				Map<String, Double> aaGeneData = null;
 				try {
-					System.out.println(AAseq + " " + geneData);
+					//System.out.println(AAseq + " " + geneData);
 					Object[] res = processaProteinas();
 					if (!geneData.trim().isEmpty()) {
 						aaGeneData = ReadFile.processaProteinas1(AAseq, geneData);
@@ -292,7 +292,7 @@ public class NucAaComp {
 
 						if(h1.get(key1)!=0 && key1.getShortName()!="U" && key1.getShortName()!="X" && key1.getShortName()!="*"){
 							
-							System.out.println(key1.getShortName()+"-->"+pContentg_m.get(key1.getShortName()));
+							//System.out.println(key1.getShortName()+"-->"+pContentg_m.get(key1.getShortName()));
 							
 							if (!geneData.trim().isEmpty()) {
 								pContentm.put(key1.getShortName(), aaGeneData.get(key1.getShortName()));
@@ -463,14 +463,19 @@ public class NucAaComp {
 		JButton OpenGD = new JButton("Open");
 		OpenGD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to open");   
 				
-				FileDialog gd = new FileDialog(s, SWT.OPEN);
-				gd.setText("Abrir");
-				gd.setFilterPath("C:/");
-				String[] filterExt = { "*.txt", "*.doc", ".rtf", "*.*" };
-				gd.setFilterExtensions(filterExt);
-				String selected = gd.open();
-				inputGD.setText(selected);
+				int userSelection = fileChooser.showOpenDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToOpen = fileChooser.getSelectedFile();
+				    inputGD.setText(fileToOpen.getAbsolutePath());
+				    System.out.println("Open as file: " + fileToOpen.getAbsolutePath());
+				}
 			}
 		});
 		
@@ -478,17 +483,21 @@ public class NucAaComp {
 		ExportP.setText("Export");
 		ExportP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FileDialog gd = new FileDialog(s, SWT.SAVE);
-				gd.setText("Guardar");
-				gd.setFilterPath("C:/");
-				String[] filterExt = { "*.csv"};
-				gd.setFilterExtensions(filterExt);
-		        String selected = gd.open();
-		        gd.setFileName(selected);
-		        fileName.setText(selected);
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+				 
+				int userSelection = fileChooser.showSaveDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToSave = fileChooser.getSelectedFile();
+				    System.out.println("Open as file: " + fileToSave.getAbsolutePath()+ ".csv");
+				
 		        FileWriter writer;
 		        try {
-					writer = new FileWriter(selected, false);
+					writer = new FileWriter(fileToSave.getAbsolutePath() + ".csv", false);
 						writer.write("Monomer");
 						writer.write(";");
 						writer.write("mmol/gDW");
@@ -503,12 +512,14 @@ public class NucAaComp {
 						writer.write(pContentm.get(base).toString());
 						writer.write("\r\n");
 					}
+		        
 					System.out.println("Write success!");
 					writer.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}
 		        //System.out.print(pContentmmol_gDW.keySet()+ "-->" + pContentmmol_gDW.values()+ "-->" + pContentm.values());
 
 			}      
@@ -574,16 +585,21 @@ public class NucAaComp {
 		JButton OpenFD = new JButton("Open");
 		OpenFD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				FileDialog fd = new FileDialog(s, SWT.OPEN);
-				fd.setText("Abrir");
-				fd.setFilterPath("C:/");
-				String[] filterExt = { "*.txt", "*.doc", ".rtf", "*.*" };
-				fd.setFilterExtensions(filterExt);
-				String selected = fd.open();
-				inputFD.setText(selected);
-
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to open");   
+				 
+				int userSelection = fileChooser.showOpenDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToOpen = fileChooser.getSelectedFile();
+				    inputFD.setText(fileToOpen.getAbsolutePath());
+				    System.out.println("Open as file: " + fileToOpen.getAbsolutePath());
+				}
 			}
+
 		});
 		OpenFD.setBounds(251, 27, 72, 23);
 		panel_1.add(OpenFD);
@@ -750,17 +766,21 @@ public class NucAaComp {
 		JButton DExport = new JButton("Export");
 		DExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				FileDialog gd = new FileDialog(s, SWT.SAVE);
-				gd.setText("Guardar");
-				gd.setFilterPath("C:/");
-				String[] filterExt = { "*.csv"};
-				gd.setFilterExtensions(filterExt);
-		        String selected = gd.open();
-		        gd.setFileName(selected);
-		        fileName.setText(selected);
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+				 
+				int userSelection = fileChooser.showSaveDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToSave = fileChooser.getSelectedFile();
+				    System.out.println("Save as file: " + fileToSave.getAbsolutePath() + ".csv");
+				    
 		        FileWriter writer;
 		        try {
-					writer = new FileWriter(selected, false);
+					writer = new FileWriter(fileToSave.getAbsolutePath()+ ".csv", false);
 						writer.write("Monomer");
 						writer.write(";");
 						writer.write("mmol/gDW");
@@ -781,7 +801,7 @@ public class NucAaComp {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				}
 			}
 		});
 		DExport.setBounds(658, 93, 101, 23);
@@ -804,14 +824,19 @@ public class NucAaComp {
 		OpenmRNA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				FileDialog fd = new FileDialog(s, SWT.OPEN);
-				fd.setText("Abrir");
-				fd.setFilterPath("C:/");
-				String[] filterExt = { "*.txt", "*.doc", ".rtf", "*.*" };
-				fd.setFilterExtensions(filterExt);
-				String selected = fd.open();
-				inputFmRNA.setText(selected);
-
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+				 
+				int userSelection = fileChooser.showOpenDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToOpen = fileChooser.getSelectedFile();
+				    inputFmRNA.setText(fileToOpen.getAbsolutePath());
+				    System.out.println("Save as file: " + fileToOpen.getAbsolutePath());
+				}
 			}
 		});
 		OpenmRNA.setBounds(251, 27, 72, 23);
@@ -830,13 +855,19 @@ public class NucAaComp {
 		OpentRNA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				FileDialog fd = new FileDialog(s, SWT.OPEN);
-				fd.setText("Abrir");
-				fd.setFilterPath("C:/");
-				String[] filterExt = { "*.txt", "*.doc", ".rtf", "*.*" };
-				fd.setFilterExtensions(filterExt);
-				String selected = fd.open();
-				inputFtRNA.setText(selected);
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to open");   
+				 
+				int userSelection = fileChooser.showOpenDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToOpen = fileChooser.getSelectedFile();
+				    inputFtRNA.setText(fileToOpen.getAbsolutePath());
+				    System.out.println("Open as file: " + fileToOpen.getAbsolutePath());
+				}
 
 			}
 		});
@@ -856,13 +887,19 @@ public class NucAaComp {
 		OpenrRNA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				FileDialog fd = new FileDialog(s, SWT.OPEN);
-				fd.setText("Abrir");
-				fd.setFilterPath("C:/");
-				String[] filterExt = { "*.txt", "*.doc", ".rtf", "*.*" };
-				fd.setFilterExtensions(filterExt);
-				String selected = fd.open();
-				inputFrRNA.setText(selected);
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to open");   
+				 
+				int userSelection = fileChooser.showSaveDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToOpen = fileChooser.getSelectedFile();
+				    inputFrRNA.setText(fileToOpen.getAbsolutePath());
+				    System.out.println("Open as file: " + fileToOpen.getAbsolutePath());
+				}
 
 			}
 		});
@@ -1090,17 +1127,21 @@ public class NucAaComp {
 		JButton RExport = new JButton("Export");
 		RExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				FileDialog gd = new FileDialog(s, SWT.SAVE);
-				gd.setText("Guardar");
-				gd.setFilterPath("C:/");
-				String[] filterExt = { "*.csv"};
-				gd.setFilterExtensions(filterExt);
-		        String selected = gd.open();
-		        gd.setFileName(selected);
-		        fileName.setText(selected);
+				// parent component of the dialog
+				JFrame parentFrame = new JFrame();
+				 
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Specify a file to save");   
+				 
+				int userSelection = fileChooser.showSaveDialog(parentFrame);
+				 
+				if (userSelection == JFileChooser.APPROVE_OPTION) {
+				    File fileToSave = fileChooser.getSelectedFile();
+				    System.out.println("Save as file: " + fileToSave.getAbsolutePath()+ ".csv");
+				    
 		        FileWriter writer;
 		        try {
-					writer = new FileWriter(selected, false);
+					writer = new FileWriter(fileToSave.getAbsolutePath()+ ".csv", false);
 						writer.write("Monomer");
 						writer.write(";");
 						writer.write("mmol/gDW");
@@ -1121,7 +1162,7 @@ public class NucAaComp {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+				}
 			}
 		});
 		RExport.setBounds(658, 90, 101, 23);
@@ -1163,7 +1204,6 @@ public class NucAaComp {
 			//					System.out.print(protID);
 
 		}
-		tamanho=tamanho+sequencias.size();
 
 		ret[0]=h;
 		ret[1]=new Integer (tamanho);
@@ -1274,7 +1314,7 @@ public class NucAaComp {
 
 		rett[0]=h;
 		rett[1]=new Integer (tamanhot);
-		System.out.print (tamanhot);
+		//System.out.print (tamanhot);
 		return rett;
 	}
 
@@ -1313,4 +1353,7 @@ public class NucAaComp {
 
 		return retr;
 	}
+
 }
+
+
